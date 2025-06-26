@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Componentes de Computadora</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-main: #0e101c;
+      --bg-card: #1a1d2e;
+      --primary: #6366f1;
+      --accent: #8b5cf6;
+      --text: #f3f4f6;
+      --muted: #9ca3af;
+      --hover: #373a5d;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text);
+      cursor: url('img/cursor.png'), auto;
+    }
+
+    header {
+      text-align: center;
+      padding: 50px 20px 30px;
+      background: linear-gradient(120deg, var(--primary), var(--accent));
+      border-bottom-left-radius: 40px;
+      border-bottom-right-radius: 40px;
+      color: white;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.3rem;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      color: #d1d5db;
+    }
+
+    .intro {
+      max-width: 800px;
+      margin: 40px auto;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .intro img {
+      max-width: 50%;
+      border-radius: 16px;
+      margin: 20px 0;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    }
+
+    .intro p {
+      font-size: 1.1rem;
+      color: var(--muted);
+      text-align: justify;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      padding: 30px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    nav button {
+      background-color: var(--bg-card);
+      color: var(--text);
+      border: 2px solid var(--primary);
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    nav button:hover {
+      background-color: var(--hover);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(99, 102, 241, 0.3);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(4px);
+      background-color: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .modal-content {
+      background-color: var(--bg-card);
+      border-radius: 18px;
+      padding: 30px;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      position: relative;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content.cerrando {
+      animation: fadeOut 0.3s ease forwards;
+    }
+
+    .modal-content h2 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .modal-content p {
+      text-align: justify;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .modal-content img {
+      max-width: 100%;
+      border-radius: 12px;
+      margin: 1rem 0;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .close {
+      position: absolute;
+      top: 14px;
+      right: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--accent);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .close:hover {
+      color: #ef4444;
+    }
+
+    /* Botón para mostrar/ocultar controles de volumen */
+    #volumen-toggle {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 2000;
+    }
+
+    #volumen-toggle button {
+      background-color: var(--bg-card);
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 10px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    /* Contenedor de controles de volumen (oculto inicialmente) */
+    #controles-volumen {
+      position: fixed;
+      bottom: 70px;
+      left: 20px;
+      background-color: var(--bg-card);
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      padding: 10px;
+      z-index: 2000;
+      display: none;
+    }
+
+    #controles-volumen .control {
+      margin-bottom: 10px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #controles-volumen label {
+      min-width: 70px;
+      font-weight: 600;
+    }
+
+    #controles-volumen input[type="range"] {
+      width: 140px;
+      cursor: pointer;
+    }
+
+    footer {
+      margin-top: 60px;
+      background-color: var(--bg-card);
+      padding: 20px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: var(--muted);
+      border-top: 1px solid #2c2f4b;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; transform: scale(1); }
+      to { opacity: 0; transform: scale(0.9); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Componentes de Computadora</h1>
+    <p>Explorá cada parte que da vida a tu PC ⚙️</p>
+  </header>
+
+  <div class="intro">
+    <img src="img/setup.jpg" alt="Computadora armada">
+    <p>Una computadora está compuesta por múltiples partes que trabajan en conjunto para ejecutar tareas y programas. Desde el cerebro que procesa la información (CPU), hasta la tarjeta gráfica que procesa los gráficos, cada componente cumple un rol esencial. Esta guía te ayudará a conocerlos y entender cómo se complementan.</p>
+  </div>
+
+  <nav>
+    <button onclick="abrirModal('modal1'); reproducirSonido('sonido1')">Procesador</button>
+    <button onclick="abrirModal('modal2'); reproducirSonido('sonido2')">Placa Madre</button>
+    <button onclick="abrirModal('modal3'); reproducirSonido('sonido3')">Memoria RAM</button>
+    <button onclick="abrirModal('modal4'); reproducirSonido('sonido4')">Tarjeta Gráfica</button>
+    <button onclick="abrirModal('modal5'); reproducirSonido('sonido5')">Almacenamiento</button>
+    <button onclick="abrirModal('modal6'); reproducirSonido('sonido6')">Fuente</button>
+    <button onclick="abrirModal('modal7'); reproducirSonido('sonido7')">Gabinete</button>
+  </nav>
+
+  <!-- Música de fondo y sonidos -->
+  <audio id="musica-fondo" src="sounds/music.mp3" preload="auto" loop></audio>
+  <audio id="sound-startup" src="sounds/startup.mp3" preload="auto"></audio>
+  <audio id="sonido1" src="sounds/cpu.mp3" preload="auto"></audio>
+  <audio id="sonido2" src="sounds/motherboard.mp3" preload="auto"></audio>
+  <audio id="sonido3" src="sounds/ram.mp3" preload="auto"></audio>
+  <audio id="sonido4" src="sounds/gpu.mp3" preload="auto"></audio>
+  <audio id="sonido5" src="sounds/storage.mp3" preload="auto"></audio>
+  <audio id="sonido6" src="sounds/psu.mp3" preload="auto"></audio>
+  <audio id="sonido7" src="sounds/case.mp3" preload="auto"></audio>
+
+  <!-- Botón para mostrar/ocultar controles de volumen -->
+  <div id="volumen-toggle">
+    <button onclick="toggleControlesVolumen()">🔧</button>
+  </div>
+
+  <!-- Controles de volumen -->
+  <div id="controles-volumen">
+    <div class="control">
+      <label for="volumen">🎵 Música:</label>
+      <input type="range" id="volumen" min="0" max="1" step="0.01" value="0.3" onchange="cambiarVolumenMusica(this.value)" />
+    </div>
+    <div class="control">
+      <label for="volumenFX">🎚️ Efectos:</label>
+      <input type="range" id="volumenFX" min="0" max="1" step="0.01" value="1" onchange="cambiarVolumenFX(this.value)" />
+    </div>
+  </div>
+
+  <!-- Modales -->
+  <div id="modal1" class="modal"><div class="modal-content"><span class="close" onclick="cerrarModal('modal1')">&times;</span><h2>Procesador</h2><img src="img/cpu.jpg" alt="Procesador"><p>El CPU es el cerebro de la computadora. Ejecuta instrucciones, gestiona procesos y coordina todas las tareas.</p></div></div>
+  <div id="modal2" class="modal"><div class="modal-content"><span class="close" onclick="cerrarModal('modal2')">&times;</span><h2>Placa Madre</h2><img src="img/mother.jpg" alt="Placa Madre"><p>La placa madre conecta todos los componentes del sistema, distribuyendo energía y datos.</p></div></div>
+  <div id="modal3" class="modal"><div class="modal-content"><span class="close" onclick="cerrarModal('modal3')">&times;</span><h2>Memoria RAM</h2><img src="img/ram.jpg" alt="Memoria RAM"><p>La RAM almacena temporalmente datos que el sistema necesita rápidamente, mejorando el rendimiento.</p></div></div>
+  <div id="modal4" class="modal"><div class="modal-content"><span class="close" onclick="cerrarModal('modal4')">&times;</span><h2>Tarjeta Gráfica</h2><img src="img/gpu.jpg" alt="Tarjeta Gráfica"><p>La GPU procesa imágenes, gráficos y video, fundamental en gaming, diseño y multimedia.</p></div></div>
+  <div id="modal5" class="modal"><div class="modal-content"><span class="close" onclick="cerrarModal('modal5')">&times;</span><h2>Almacenamiento</h2><img src="img/ssd.jpg" alt="Almacenamiento"><p>El almacenamiento guarda el sistema, programas y archivos. SSDs son rápidos; HDDs más económicos.</p></div></div>
+  <div id="modal6" class="modal"><div class="modal-content"><span class="close" onclick="cerrarModal('modal6')">&times;</span><h2>Fuente</h2><img src="img/psu.jpg" alt="Fuente de Poder"><p>Convierte la electricidad de tu hogar en energía para los componentes internos.</p></div></div>
+  <div id="modal7" class="modal"><div class="modal-content"><span class="close" onclick="cerrarModal('modal7')">&times;</span><h2>Gabinete</h2><img src="img/case.jpg" alt="Gabinete"><p>Contiene y protege todos los componentes, permite el flujo de aire y el acceso físico.</p></div></div>
+
+  <footer>&copy; 2025 InfoPC. Todos los derechos reservados.</footer>
+
+  <script>
+    let musicaReproducida = false;
+
+    function reproducirMusica() {
+      if (musicaReproducida) return;
+      document.getElementById('sound-startup')?.play().catch(() => {});
+      const musica = document.getElementById('musica-fondo');
+      if (musica) {
+        musica.volume = document.getElementById('volumen').value;
+        musica.play().catch(() => {});
+      }
+      musicaReproducida = true;
+    }
+
+    function cambiarVolumenMusica(valor) {
+      const musica = document.getElementById('musica-fondo');
+      if (musica) musica.volume = valor;
+    }
+
+    function cambiarVolumenFX(valor) {
+      const efectos = ['sonido1','sonido2','sonido3','sonido4','sonido5','sonido6','sonido7'];
+      efectos.forEach(id => {
+        const audio = document.getElementById(id);
+        if (audio) audio.volume = valor;
+      });
+    }
+
+    function toggleControlesVolumen() {
+      const controles = document.getElementById('controles-volumen');
+      controles.style.display = controles.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function abrirModal(id) {
+      reproducirMusica(); // activa música si aún no lo hizo
+      const modal = document.getElementById(id);
+      const contenido = modal.querySelector('.modal-content');
+      contenido.classList.remove('cerrando');
+      modal.style.display = 'flex';
+    }
+
+    function cerrarModal(id) {
+      const modal = document.getElementById(id);
+      const contenido = modal.querySelector('.modal-content');
+      contenido.classList.add('cerrando');
+      setTimeout(() => {
+        modal.style.display = 'none';
+        contenido.classList.remove('cerrando');
+      }, 300);
+    }
+
+    function reproducirSonido(id) {
+      const audio = document.getElementById(id);
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play();
+      }
+    }
+
+    window.onclick = function (event) {
+      document.querySelectorAll('.modal').forEach((modal) => {
+        if (event.target === modal) {
+          const contenido = modal.querySelector('.modal-content');
+          contenido.classList.add('cerrando');
+          setTimeout(() => {
+            modal.style.display = 'none';
+            contenido.classList.remove('cerrando');
+          }, 300);
+        }
+      });
+    };
+
+    // Inicializa volumen FX con valor por defecto al cargar
+    window.addEventListener('load', () => {
+      cambiarVolumenFX(document.getElementById('volumenFX').value);
+      reproducirMusica(); // Intenta iniciar música al cargar (puede ser bloqueado por navegador)
+    });
+  </script>
+</body>
+</html>
